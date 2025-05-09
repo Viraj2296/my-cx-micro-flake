@@ -36,6 +36,16 @@ jobs:
           pwd
           mkdir bin
 
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+         path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+         restore-keys: |
+          ${{ runner.os }}-go-
+
       - name: Build
         run: |
           CURRENT_DATE=$(date +"%Y-%m-%d_%H_%M_%S")
