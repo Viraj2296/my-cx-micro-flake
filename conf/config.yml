@@ -1,0 +1,40 @@
+server:
+  address: 0.0.0.0
+  port: 9808
+loadComponent: true
+deploymentMode: dev
+servicePort: 23568
+baseServices:
+  #- content
+  #  - analytics
+  #  - backup_recovery
+  - system
+  #- iam
+#  - notifications
+customServices:
+  - auth
+#  - content
+#  - analytics
+#  - project
+  - machines
+#  - moulds
+  - notifications
+#  - production_order
+#  - maintenance
+#  - scheduler
+#  - it
+#  - fixed_assets
+#  - incident
+#  - facility
+  - factory
+  - machine_downtime
+#  - tooling
+#  - work_hour_assignment
+#  - tickets
+#  - manufacturing
+#  - batch_management
+#  - qa
+#  - traceability
+#  - labour_management
+#  - iot
+  - spare_part_inventory

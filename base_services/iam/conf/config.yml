@@ -1,0 +1,19 @@
+app:
+  database:
+    host: 127.0.0.1
+    port: 3306
+    user: admin
+    name: kaneka_wms
+    password: wAYabEqNxeF9c5Sq
+    type: mysql
+  servicePoint: tcp://127.0.0.1:23568
+  componentTable: iam_component
+  moduleName: "iam"
+  excludeRoutingList:
+    - 'PUT,record/:recordId'
+    - 'POST,records'
+  enableMigration: true
+  loadComponentSchema: true
+  loadDefaultRecords: true
+refreshTokenInterval: 5h
+authTokenInterval: 3h

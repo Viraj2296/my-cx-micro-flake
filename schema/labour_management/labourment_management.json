@@ -1,0 +1,1345 @@
+[
+  {
+    "id": 1,
+    "object_info":
+    {
+      "moduleId": 28,
+      "createdAt": "2022-12-21T02:28:46.805Z",
+      "createdBy": 1,
+      "tableSchema":
+      [
+        {
+          "name": "SHIFT REFERENCE ID",
+          "type": "text",
+          "display": true,
+          "property": "shiftReferenceId"
+        },
+        {
+          "name": "DEPARTMENT",
+          "type": "text",
+          "display": true,
+          "property": "departmentId",
+          "isGroupByField": true
+        },
+        {
+          "name": "SITE",
+          "type": "text",
+          "display": true,
+          "property": "siteId"
+        },
+        {
+          "name": "CREATED",
+          "type": "text",
+          "display": true,
+          "property": "createdAt"
+        },
+        {
+          "name": "LAST UPDATED",
+          "type": "text",
+          "display": true,
+          "property": "lastUpdatedAt"
+        },
+        {
+          "name": "SHIFT START DATE",
+          "type": "text",
+          "display": true,
+          "property": "shiftStartDate"
+        },
+        {
+          "name": "SHIFT START TIME",
+          "type": "text",
+          "display": true,
+          "property": "shiftStartTime"
+        },
+        {
+          "name": "SHIFT END DATE",
+          "type": "number",
+          "display": true,
+          "property": "shiftEndDate"
+        },
+        {
+          "name": "SHIFT END TIME",
+          "type": "number",
+          "display": true,
+          "property": "shiftEndTime"
+        },
+        {
+          "name": "IS DAY SHIFT",
+          "type": "boolean",
+          "display": true,
+          "property": "isDayShift"
+        },
+        {
+          "name": "SHIFT STATUS",
+          "type": "background_color",
+          "display": true,
+          "property": "shiftStatus",
+          "headerObjectMapping":
+          {
+            "query":
+            {
+              "query": "select object_info->>'$.status' as status, object_info->>'$.colorCode' as color_code  from labour_management_shift_status",
+              "replacementFields":
+              [],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "keyValue":
+              {
+                "key": "status",
+                "value": "color_code"
+              }
+            }
+          }
+        },
+        {
+          "name": "SHIFT SUPERVISOR",
+          "type": "text",
+          "display": true,
+          "property": "shiftSupervisor"
+        },
+        {
+          "name": "SCHEDULED ORDER EVENTS",
+          "type": "array",
+          "display": true,
+          "property": "listOfScheduledOrderEvents",
+          "colorCode": "#F1DCB8"
+        }
+      ],
+      "targetTable": "labour_management_shift_master",
+      "recordSchema":
+      [
+        {
+          "type": "datetime",
+          "isEdit": false,
+          "property": "createdAt"
+        },
+        {
+          "type": "datetime",
+          "isEdit": false,
+          "property": "lastUpdatedAt"
+        },
+        {
+          "type": "text",
+          "isEdit": false,
+          "property": "objectStatus"
+        },
+        {
+          "type": "text",
+          "isEdit": false,
+          "property": "shiftReferenceId"
+        },
+        {
+          "type": "text",
+          "isEdit": true,
+          "default": "Shift Start Date",
+          "property": "shiftStartDate",
+          "fieldValidator":
+          {
+            "create":
+            [
+              {
+                "validator": "mandatory"
+              },
+              {
+                "validator": "emptyField"
+              }
+            ]
+          }
+        },
+        {
+          "type": "text",
+          "isEdit": true,
+          "default": 0,
+          "property": "shiftStartTime",
+          "fieldValidator":
+          {
+            "create":
+            [
+              {
+                "validator": "mandatory"
+              },
+              {
+                "validator": "emptyField"
+              }
+            ]
+          }
+        },
+        {
+          "type": "number",
+          "isEdit": true,
+          "default": 0,
+          "property": "shiftEndDate",
+          "fieldValidator":
+          {
+            "create":
+            [
+              {
+                "validator": "mandatory"
+              },
+              {
+                "validator": "emptyField"
+              }
+            ]
+          }
+        },
+        {
+          "type": "text",
+          "isEdit": true,
+          "default": 0,
+          "property": "shiftEndTime",
+          "fieldValidator":
+          {
+            "create":
+            [
+              {
+                "validator": "mandatory"
+              },
+              {
+                "validator": "emptyField"
+              }
+            ]
+          }
+        },
+        {
+          "type": "boolean",
+          "isEdit": true,
+          "default": false,
+          "property": "isDayShift"
+        },
+        {
+          "type": "boolean",
+          "isEdit": true,
+          "default": false,
+          "property": "canCheckIn"
+        },
+        {
+          "type": "boolean",
+          "isEdit": true,
+          "default": true,
+          "property": "canActivate"
+        },
+        {
+          "type": "boolean",
+          "isEdit": true,
+          "default": false,
+          "property": "isSupervisorCheckedIn"
+        },
+        {
+          "type": "int",
+          "isEdit": true,
+          "default": 3,
+          "property": "shiftStatus",
+          "linkedObjectMapping":
+          {
+            "query":
+            {
+              "query": "select object_info->>'$.status' as `shift_status` from labour_management_shift_status where id =[status_id]",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "status_id",
+                  "property": "shiftStatus"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleValue":
+              {
+                "field": "shift_status"
+              }
+            }
+          },
+          "responseObjectMapping":
+          {
+            "query":
+            {
+              "query": "select id, object_info->>'$.status' as `status` from labour_management_shift_status",
+              "replacementFields":
+              [],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleDropdown":
+              {
+                "index": "id",
+                "value": "status"
+              }
+            }
+          }
+        },
+        {
+          "type": "int",
+          "isEdit": true,
+          "property": "departmentId",
+          "linkedObjectMapping":
+          {
+            "query":
+            {
+              "query": "select object_info->>'$.name' as `departmentName` from factory_department where id =[department_id]",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "department_id",
+                  "property": "departmentId"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleValue":
+              {
+                "field": "departmentName"
+              }
+            }
+          },
+          "responseObjectMapping":
+          {
+            "query":
+            {
+              "query": "select id, object_info->>'$.name' as `departmentName` from factory_department",
+              "replacementFields":
+              [],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleDropdown":
+              {
+                "index": "id",
+                "value": "departmentName"
+              }
+            }
+          }
+        },
+        {
+          "type": "int",
+          "isEdit": true,
+          "property": "siteId",
+          "linkedObjectMapping":
+          {
+            "query":
+            {
+              "query": "select object_info->>'$.name' as `siteName` from factory_site where id =[site_id]",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "site_id",
+                  "property": "siteId"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleValue":
+              {
+                "field": "siteName"
+              }
+            }
+          },
+          "responseObjectMapping":
+          {
+            "query":
+            {
+              "query": "select id, object_info->>'$.name' as `siteName` from factory_site",
+              "replacementFields":
+              [],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleDropdown":
+              {
+                "index": "id",
+                "value": "siteName"
+              }
+            }
+          }
+        },
+        {
+          "type": "boolean",
+          "isEdit": true,
+          "default": false,
+          "property": "canShiftStart"
+        },
+        {
+          "type": "boolean",
+          "isEdit": true,
+          "default": false,
+          "property": "canShiftStop"
+        },
+        {
+          "type": "int",
+          "isEdit": true,
+          "property": "shiftSupervisor",
+          "linkedObjectMapping":
+          {
+            "query":
+            {
+              "query": "select id, object_info->>'$.fullName' as `fullName` from cx_micro_flake.user where object_info->>'$.jobRoleId' = '46'",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "user_id",
+                  "property": "testedBy"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleValue":
+              {
+                "field": "fullName"
+              }
+            }
+          },
+          "responseObjectMapping":
+          {
+            "query":
+            {
+              "query": "select id, object_info->>'$.fullName' as `fullName` from cx_micro_flake.user where object_info->>'$.jobRoleId' = '46'",
+              "replacementFields":
+              [],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleDropdown":
+              {
+                "index": "id",
+                "value": "fullName"
+              }
+            }
+          }
+        },
+        {
+          "type": "array",
+          "isEdit": true,
+          "default":
+          [],
+          "property": "scheduledOrderEvents"
+        }
+      ],
+      "componentName": "labour_management_shift_master",
+      "lastUpdatedAt": "2022-12-21T02:28:46.805Z",
+      "lastUpdatedBy": 1,
+      "additionalRecords":
+      [
+        {
+          "property": "scheduledOrderEventsList",
+          "objectMapping":
+          {
+            "query":
+            {
+              "query": "select id, object_info->>'$.name' as `name` from assembly_scheduled_order_event where object_info->>'$.eventStatus' = '4'",
+              "replacementFields":
+              [],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleDropdown":
+              {
+                "index": "id",
+                "value": "name"
+              }
+            }
+          }
+        },
+        {
+          "property": "existingScheduledOrderEvents",
+          "objectMapping":
+          {
+            "query":
+            {
+              "query": "select id , object_info->>'$.name' as `name` from assembly_scheduled_order_event where id  in ([event])",
+              "replacementFields":
+              [
+                {
+                  "type": "array",
+                  "field": "event",
+                  "format": "json_array_to_string_array",
+                  "property": "scheduledOrderEvents"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "table":
+              {
+                "schema":
+                [
+                  {
+                    "name": "Event Id",
+                    "type": "text",
+                    "display": true,
+                    "property": "id"
+                  },
+                  {
+                    "name": "Name",
+                    "type": "text",
+                    "display": true,
+                    "property": "name"
+                  }
+                ],
+                "commonRouteLink": ""
+              }
+            }
+          }
+        }
+      ],
+      "tableAdditionalRecords":
+      [
+        {
+          "property": "listOfScheduledOrderEvents",
+          "objectMapping":
+          {
+            "query":
+            {
+              "query": "select id , object_info->>'$.name' as `schedulerName` from fuyu_mes.assembly_scheduled_order_event where id in ([scheduled_event_id])",
+              "replacementFields":
+              [
+                {
+                  "type": "array",
+                  "field": "scheduled_event_id",
+                  "format": "json_array_to_string_array",
+                  "property": "scheduledOrderEvents"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleObjectValueArray":
+              {
+                "field": "schedulerName"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "object_info":
+    {
+      "moduleId": 28,
+      "createdAt": "2022-12-21T02:28:46.805Z",
+      "createdBy": 1,
+      "tableSchema":
+      [
+        {
+          "name": "CREATED",
+          "type": "date",
+          "display": false,
+          "property": "createdAt"
+        },
+        {
+          "name": "LAST UPDATED",
+          "type": "date",
+          "display": false,
+          "property": "lastUpdatedAt"
+        },
+        {
+          "name": "SHIFT ID",
+          "type": "text",
+          "display": true,
+          "property": "shiftResourceId",
+          "isGroupByField": true
+        },
+        {
+          "name": "CHECK-IN DATE",
+          "type": "number",
+          "display": true,
+          "property": "checkInDate"
+        },
+        {
+          "name": "CHECK-IN TIME",
+          "type": "text",
+          "display": true,
+          "property": "checkInTime"
+        },
+        {
+          "name": "EMPLOYEE ID",
+          "type": "text",
+          "display": true,
+          "property": "employeeNumber"
+        },
+        {
+          "name": "EMPLOYEE NAME",
+          "type": "text",
+          "display": true,
+          "property": "employeeName"
+        },
+        {
+          "name": "ROLE",
+          "type": "text",
+          "display": true,
+          "property": "jobTitle"
+        },
+        {
+          "name": "PRODUCT LINE",
+          "type": "text",
+          "display": true,
+          "property": "manufacturingLines"
+        },
+        {
+          "name": "CHECK-OUT DATE",
+          "type": "text",
+          "display": true,
+          "property": "checkOutDate"
+        },
+        {
+          "name": "CHECK-OUT TIME",
+          "type": "text",
+          "display": true,
+          "property": "checkOutTime"
+        }
+      ],
+      "targetTable": "labour_management_attendance",
+      "recordSchema":
+      [
+        {
+          "type": "datetime",
+          "isEdit": false,
+          "property": "createdAt"
+        },
+        {
+          "type": "datetime",
+          "isEdit": false,
+          "property": "lastUpdatedAt"
+        },
+        {
+          "type": "text",
+          "isEdit": false,
+          "property": "objectStatus"
+        },
+        {
+          "type": "text",
+          "isEdit": true,
+          "property": "ShiftResourceId"
+        },
+        {
+          "type": "date",
+          "isEdit": true,
+          "property": "checkInDate"
+        },
+        {
+          "type": "text",
+          "isEdit": true,
+          "property": "checkInTime"
+        },
+        {
+          "type": "number",
+          "isEdit": true,
+          "property": "userResourceId"
+        },
+        {
+          "type": "text",
+          "isEdit": true,
+          "property": "employeeName",
+          "responseObjectMapping":
+          {
+            "query":
+            {
+              "query": "select  object_info->>'$.fullName' as `fullName`  from cx_micro_flake.user where id = [user_id]",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "user_id",
+                  "property": "userResourceId"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleValue":
+              {
+                "field": "fullName"
+              }
+            }
+          }
+        },
+        {
+          "type": "text",
+          "isEdit": true,
+          "property": "employeeNumber",
+          "responseObjectMapping":
+          {
+            "query":
+            {
+              "query": "select  object_info->>'$.employeeNumber' as `employeeNumber` from cx_micro_flake.user where id  = [user_id]",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "user_id",
+                  "property": "userResourceId"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleValue":
+              {
+                "field": "employeeNumber"
+              }
+            }
+          }
+        },
+        {
+          "type": "number",
+          "isEdit": true,
+          "property": "shiftResourceId",
+          "linkedObjectMapping":
+          {
+            "query":
+            {
+              "query": "select object_info->>'$.shiftReferenceId' as `shiftIdName` from labour_management_shift_master where id =[shift_id]",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "shift_id",
+                  "property": "shiftResourceId"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleValue":
+              {
+                "field": "shiftIdName"
+              }
+            }
+          },
+          "responseObjectMapping":
+          {
+            "query":
+            {
+              "query": "select id, object_info->>'$.shiftId' as `shiftIdName` from labour_management_shift_master",
+              "replacementFields":
+              [],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleDropdown":
+              {
+                "index": "id",
+                "value": "shiftIdName"
+              }
+            }
+          }
+        },
+        {
+          "type": "text",
+          "isEdit": true,
+          "property": "jobTitleName",
+          "responseObjectMapping":
+          {
+            "query":
+            {
+              "query": "SELECT job.object_info ->> '$.jobTitleName' as `jobTitleName` FROM cx_micro_flake.user as us inner join cx_micro_flake.job_role as job on us.object_info ->> '$.jobRoleId' = job.id where us.id = [user_id];",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "user_id",
+                  "property": "userResourceId"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleValue":
+              {
+                "field": "jobTitleName"
+              }
+            }
+          }
+        },
+        {
+          "type": "date",
+          "isEdit": true,
+          "property": "checkOutDate"
+        },
+        {
+          "type": "text",
+          "isEdit": true,
+          "property": "checkOutTime"
+        }
+      ],
+      "componentName": "labour_management_attendance",
+      "lastUpdatedAt": "2022-12-21T02:28:46.805Z",
+      "lastUpdatedBy": 1,
+      "tableAdditionalRecords":
+      [
+        {
+          "property": "employeeName",
+          "objectMapping":
+          {
+            "query":
+            {
+              "query": "select  object_info->>'$.fullName' as `employeeName` from cx_micro_flake.user where id  = [user_id]",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "user_id",
+                  "property": "userResourceId"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleValue":
+              {
+                "field": "employeeName"
+              }
+            }
+          }
+        },
+        {
+          "property": "employeeNumber",
+          "objectMapping":
+          {
+            "query":
+            {
+              "query": "select  object_info->>'$.employeeNumber' as `employeeNumber` from cx_micro_flake.user where id  = [user_id]",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "user_id",
+                  "property": "userResourceId"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleValue":
+              {
+                "field": "employeeNumber"
+              }
+            }
+          }
+        },
+        {
+          "property": "jobTitle",
+          "objectMapping":
+          {
+            "query":
+            {
+              "query": "select job.object_info ->> '$.jobTitleName' as `jobTitle` from cx_micro_flake.user as us inner join cx_micro_flake.job_role as job on us.object_info ->> '$.jobRoleId' = job.id where us.id = [user_id]",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "user_id",
+                  "property": "userResourceId"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleValue":
+              {
+                "field": "jobTitle"
+              }
+            }
+          }
+        },
+        {
+          "property": "manufacturingLines",
+          "objectMapping":
+          {
+            "query":
+            {
+              "query": "select object_info->>'$.name' as `name` from assembly_machine_lines where id in ([manufacturingLines])",
+              "replacementFields":
+              [
+                {
+                  "type": "array",
+                  "field": "manufacturingLines",
+                  "format": "json_array_to_string_array",
+                  "property": "manufacturingLines"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleObjectValueArray":
+              {
+                "field": "name"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": 3,
+    "object_info":
+    {
+      "moduleId": 28,
+      "createdAt": "2022-12-21T02:28:46.805Z",
+      "createdBy": 1,
+      "tableSchema":
+      [
+        {
+          "name": "Status",
+          "type": "text",
+          "display": true,
+          "property": "status"
+        },
+        {
+          "name": "Color Code",
+          "type": "color",
+          "display": true,
+          "property": "colorCode"
+        },
+        {
+          "name": "Created",
+          "type": "date",
+          "display": true,
+          "property": "createdAt"
+        },
+        {
+          "name": "Last Updated",
+          "type": "date",
+          "display": true,
+          "property": "lastUpdatedAt"
+        },
+        {
+          "name": "Description",
+          "type": "text",
+          "display": true,
+          "property": "description"
+        }
+      ],
+      "targetTable": "labour_management_shift_status",
+      "recordSchema":
+      [
+        {
+          "type": "datetime",
+          "isEdit": false,
+          "property": "createdAt"
+        },
+        {
+          "type": "datetime",
+          "isEdit": false,
+          "property": "lastUpdatedAt"
+        },
+        {
+          "type": "text",
+          "isEdit": false,
+          "property": "objectStatus"
+        },
+        {
+          "name": "Color Code",
+          "type": "color",
+          "display": true,
+          "property": "colorCode"
+        },
+        {
+          "type": "text",
+          "isEdit": true,
+          "property": "description",
+          "fieldValidator":
+          {
+            "create":
+            [
+              {
+                "validator": "mandatory"
+              },
+              {
+                "validator": "emptyField"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Status Name",
+          "type": "text",
+          "isEdit": true,
+          "default": "New Status",
+          "property": "status",
+          "fieldValidator":
+          {
+            "create":
+            [
+              {
+                "validator": "mandatory"
+              },
+              {
+                "validator": "duplicateField"
+              },
+              {
+                "validator": "emptyField"
+              }
+            ]
+          }
+        }
+      ],
+      "componentName": "labour_management_shift_status",
+      "lastUpdatedAt": "2022-12-21T02:28:46.805Z",
+      "lastUpdatedBy": 1
+    }
+  },
+  {
+    "id": 4,
+    "object_info":
+    {
+      "moduleId": 28,
+      "createdAt": "2022-12-21T02:28:46.805Z",
+      "createdBy": 1,
+      "tableSchema":
+      [
+        {
+          "name": "SHIFT REFERENCE ID",
+          "type": "text",
+          "display": true,
+          "property": "shiftReferenceId",
+          "isGroupByField": true
+        },
+        {
+          "name": "CREATED",
+          "type": "text",
+          "display": true,
+          "property": "createdAt"
+        },
+        {
+          "name": "LAST UPDATED",
+          "type": "text",
+          "display": true,
+          "property": "lastUpdatedAt"
+        },
+        {
+          "name": "PLANNED LINES",
+          "type": "text",
+          "display": true,
+          "property": "assemblyLine"
+        },
+        {
+          "name": "PRIORITY LEVEL",
+          "type": "text",
+          "display": true,
+          "property": "priorityLevel"
+        },
+        {
+          "name": "LINE",
+          "type": "text",
+          "display": true,
+          "property": "line"
+        },
+        {
+          "name": "PLANNED MANPOWER",
+          "type": "text",
+          "display": true,
+          "property": "plannedManpower"
+        },
+        {
+          "name": "ACTUAL MANPOWER",
+          "type": "text",
+          "display": true,
+          "property": "actualManpower"
+        },
+        {
+          "name": "ACTUAL MANPOWER PART TIMERS",
+          "type": "text",
+          "display": true,
+          "property": "actualManHourPartTimer"
+        },
+        {
+          "name": "REMARK",
+          "type": "text",
+          "display": true,
+          "property": "remarks"
+        },
+        {
+          "name": "SHIFT TARGET OUTPUT (10.75)",
+          "type": "text",
+          "display": true,
+          "property": "shiftTargetOutput"
+        },
+        {
+          "name": "SHIFT ACTUAL OUTPUT (10.75)",
+          "type": "text",
+          "display": true,
+          "property": "shiftActualOutput"
+        },
+        {
+          "name": "SHIFT TARGET OUTPUT PART TIMERS(8)",
+          "type": "text",
+          "display": true,
+          "property": "shiftTargetOutputPartTimer"
+        },
+        {
+          "name": "SHIFT ACTUAL OUTPUT PART TIMERS (8)",
+          "type": "text",
+          "display": true,
+          "property": "shiftActualOutputPartTimer"
+        }
+      ],
+      "targetTable": "labour_management_shift_production",
+      "recordSchema":
+      [
+        {
+          "type": "datetime",
+          "isEdit": false,
+          "property": "createdAt"
+        },
+        {
+          "type": "datetime",
+          "isEdit": false,
+          "property": "lastUpdatedAt"
+        },
+        {
+          "type": "text",
+          "isEdit": false,
+          "property": "objectStatus"
+        },
+        {
+          "type": "text",
+          "isEdit": false,
+          "property": "shiftId"
+        },
+        {
+          "type": "int",
+          "isEdit": false,
+          "property": "actualManHour"
+        },
+        {
+          "type": "int",
+          "isEdit": false,
+          "property": "actualManHourPartTimer"
+        },
+        {
+          "type": "int",
+          "isEdit": false,
+          "property": "shiftTargetOutputPartTimer"
+        },
+        {
+          "type": "int",
+          "isEdit": false,
+          "property": "shiftActualOutputPartTimer"
+        }
+      ],
+      "componentName": "labour_management_shift_production",
+      "lastUpdatedAt": "2022-12-21T02:28:46.805Z",
+      "lastUpdatedBy": 1,
+      "additionalRecords":
+      [],
+      "tableAdditionalRecords":
+      [
+        {
+          "property": "shiftReferenceId",
+          "objectMapping":
+          {
+            "query":
+            {
+              "query": "select  object_info->>'$.shiftReferenceId' as `shiftReferenceId` from labour_management_shift_master where id  = [shift_id]",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "shift_id",
+                  "property": "shiftId"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleObjectValueArray":
+              {
+                "field": "shiftReferenceId"
+              }
+            }
+          }
+        },
+        {
+          "property": "assemblyLine",
+          "objectMapping":
+          {
+            "query":
+            {
+              "query": "select  object_info->>'$.line' as `assemblyLine` from assembly_scheduled_order_event where id  = [scheduled_order_event_id]",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "scheduled_order_event_id",
+                  "property": "scheduledEventId"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleObjectValueArray":
+              {
+                "field": "assemblyLine"
+              }
+            }
+          }
+        },
+        {
+          "property": "priorityLevel",
+          "objectMapping":
+          {
+            "query":
+            {
+              "query": "select  object_info->>'$.priorityLevel' as `priorityLevel` from assembly_scheduled_order_event where id  = [scheduled_order_event_id]",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "scheduled_order_event_id",
+                  "property": "scheduledEventId"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleObjectValueArray":
+              {
+                "field": "priorityLevel"
+              }
+            }
+          }
+        },
+        {
+          "property": "plannedManpower",
+          "objectMapping":
+          {
+            "query":
+            {
+              "query": "select  object_info->>'$.plannedManpower' as `plannedManpower` from assembly_scheduled_order_event where id  = [scheduled_order_event_id]",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "scheduled_order_event_id",
+                  "property": "scheduledEventId"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleObjectValueArray":
+              {
+                "field": "plannedManpower"
+              }
+            }
+          }
+        },
+        {
+          "property": "shiftTargetOutput",
+          "objectMapping":
+          {
+            "query":
+            {
+              "query": "select  object_info->>'$.scheduledQty' as `scheduledQty` from assembly_scheduled_order_event where id  = [scheduled_order_event_id]",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "scheduled_order_event_id",
+                  "property": "scheduledEventId"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleObjectValueArray":
+              {
+                "field": "scheduledQty"
+              }
+            }
+          }
+        },
+        {
+          "property": "shiftActualOutput",
+          "objectMapping":
+          {
+            "query":
+            {
+              "query": "select  object_info->>'$.completedQty' as `completedQty` from assembly_scheduled_order_event where id  = [scheduled_order_event_id]",
+              "replacementFields":
+              [
+                {
+                  "type": "value",
+                  "field": "scheduled_order_event_id",
+                  "property": "scheduledEventId"
+                }
+              ],
+              "outputFieldMapping":
+              []
+            },
+            "builder":
+            {
+              "singleObjectValueArray":
+              {
+                "field": "completedQty"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+]

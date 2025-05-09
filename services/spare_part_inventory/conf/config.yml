@@ -1,0 +1,24 @@
+app:
+  database:
+    host: 127.0.0.1
+    port: 3306
+    user: cerexio_admin
+    name: fuyu_mes
+    password: wAYabEqNxeF9c5Sq
+    type: mysql
+  recordTrailTable: spare_part_inventory_record_trail
+  files:
+    downloadDirectory: /tmp/spare_part_inventory
+    uploadUrl: https://locahost/api/content/component/content_master/records
+  servicePoint: tcp://127.0.0.1:23568
+  componentTable: spare_part_inventory_component
+  moduleName: "spare_part_inventory"
+  excludeRoutingList:
+    - 'GET,overview'
+  enableMigration: false
+  loadComponentSchema: false
+
+sparePartInventory:
+  jobs:
+    inventoryLimitPollingInterval: 10
+    escalationEmailTemplate: ../services/spare_part_inventory/resource/escalation_email.html

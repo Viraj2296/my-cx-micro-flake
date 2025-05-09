@@ -1,0 +1,32 @@
+level: 'debug'
+development: true
+disableCaller: true
+disableStacktrace: true
+sampling:
+  initial: 100
+  thereafter: 100
+encoding: 'console'
+encoderConfig:
+  messageKey: 'msg'
+  levelKey: 'level'
+  timeKey: 'ts'
+  nameKey: 'logger'
+  callerKey: 'caller'
+  functionKey: 'function'
+  stacktraceKey: 'stacktrace'
+  skipLineEnding: false
+  lineEnding: "\n"
+  levelEncoder: 'capital'
+  timeEncoder: 'iso8601'
+  durationEncoder: 'string'
+  callerEncoder: 'full'
+  nameEncoder: 'full'
+  consoleSeparator: ' | '
+outputPaths:
+  - 'stdout'
+  - '../services/iot/logs/iot.log'
+errorOutputPaths:
+  - 'stderr'
+  - '../services/iot/logs/error_logs'
+initialFields:
+  app: 'mes_v2'

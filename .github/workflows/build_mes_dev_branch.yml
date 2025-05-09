@@ -1,0 +1,59 @@
+name: Building dev branch
+
+on:
+  push:
+    branches: [ "dev" ]
+
+
+jobs:
+
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install build dependencies
+      run: sudo apt-get update && sudo apt-get install -y build-essential libzmq3-dev
+
+    - name: Checkout transcendflow base
+      uses: actions/checkout@v3
+      with:
+        repository: cerexio/transcendflow-go
+        path: transcendflow
+        ref: feature/restructure
+        token: ${{ secrets.TRANSCENDFLOW_ACCESS_TOKEN }}
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.20'
+
+    - name: Go mod tidy
+      run: go mod tidy
+
+    - name: Create output directory
+      run: |
+        pwd
+        mkdir bin
+
+    - name: Build
+      run: |
+        CURRENT_DATE=$(date +"%Y-%m-%d_%H_%M_%S")
+        BUILD_NUMBER=${GITHUB_RUN_NUMBER}
+        echo "CURRENT_DATE=${CURRENT_DATE}"
+        echo "BUILD_NUMBER=${BUILD_NUMBER}"
+        OUTPUT_FILE="bin/gateway_dev_${CURRENT_DATE}"
+        echo "OUTPUT_FILE=${OUTPUT_FILE}"
+        # Construct the version string
+        VERSION="1.${BUILD_NUMBER}"
+        go build -v -o $OUTPUT_FILE -ldflags="-X main.version=${VERSION}" /home/runner/work/cx-micro-flake/cx-micro-flake/cmd/gateway_entry.go
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-southeast-1
+
+    - name: Deploy to AWS S3
+      run: aws s3 sync /home/runner/work/cx-micro-flake/cx-micro-flake/bin ${{ secrets.AWS_BUCKET }}

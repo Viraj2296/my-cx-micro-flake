@@ -1,0 +1,17 @@
+app:
+  database:
+    host: 127.0.0.1
+    port: 3306
+    user: admin
+    name: fuyu_mes_saas_app
+    password: wAYabEqNxeF9c5Sq
+    type: mysql
+  servicePoint: tcp://127.0.0.1:23568
+  componentTable: "analytics_component"
+  workflowTable: "analytics_workflow"
+  moduleName: "analytics"
+  excludeRoutingList:
+    - 'PUT,record/:recordId'
+    - 'POST,records'
+  enableMigration: true
+  loadComponentSchema: true

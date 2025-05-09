@@ -1,0 +1,25 @@
+app:
+  database:
+    host: 127.0.0.1
+    port: 3306
+    user: cerexio_admin
+    name: fuyu_mes
+    password: wAYabEqNxeF9c5Sq
+    type: mysql
+  recordTrailTable: machine_downtime_record_trail
+  files:
+    downloadDirectory: /tmp/machine_downtime
+    uploadUrl: https://locahost/api/content/component/content_master/records
+  servicePoint: tcp://127.0.0.1:23568
+  componentTable: machine_downtime_component
+  moduleName: "machine_downtime"
+  excludeRoutingList:
+    - 'GET,overview'
+  enableMigration: false
+  loadComponentSchema: false
+
+downtime:
+  jobs:
+    machineHelpSignalPollingInterval: 20
+    escalationPollingInterval: 40
+    escalationEmailTemplate: ../services/machine_downtime/resource/escalation_email.html

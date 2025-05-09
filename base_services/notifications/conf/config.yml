@@ -1,0 +1,27 @@
+app:
+  database:
+    host: 127.0.0.1
+    port: 3306
+    user: admin
+    name: fuyu_mes_saas_app
+    password: wAYabEqNxeF9c5Sq
+    type: mysql
+  servicePoint: tcp://127.0.0.1:23568
+  componentTable: notification_component
+  moduleName: "notification"
+  excludeRoutingList:
+    - 'GET,*'
+    - 'POST,*'
+    - 'PUT,*'
+    - 'DELETE,*'
+
+email:
+  connectionProfile: email
+  sendingInterval: 10s
+  fromEmail: notifications@c.io
+  poolingEnabled: true
+  testEmail:
+    isEnabled: false
+    to: y@gmail.com
+    testEmailTemplate: services/notifications/resources/test_email.html
+

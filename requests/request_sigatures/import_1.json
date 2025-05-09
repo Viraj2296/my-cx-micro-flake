@@ -1,0 +1,57 @@
+{
+"contentUrl":"http://localhost:9808/project/906d0fd569404c59956503985b330132/content/76c80719-1d6b-4043-b9e8-30e75b255da9",
+ "schema":[
+  {
+    "destinationField": "newMachineId",
+    "sourceField": "New Machine ID"
+  },
+  {
+    "destinationField": "machineDescription",
+    "sourceField": "Machine Descriptions"
+  },
+  {
+    "destinationField": "department",
+    "sourceField": "Department"
+  },
+  {
+    "destinationField": "fixedAssetNumber",
+    "sourceField": "Fixed Asset number"
+  },
+  {
+    "destinationField": "category",
+    "sourceField": "Category"
+  },
+  {
+    "destinationField": "subCategory",
+    "sourceField": "Sub-Category"
+  },
+  {
+    "destinationField": "supplier",
+    "sourceField": "Supplier"
+  },
+  {
+    "destinationField": "brand",
+    "sourceField": "Brand"
+  },
+  {
+    "destinationField": "model",
+    "sourceField": "Model"
+  },
+  {
+    "destinationField": "serialNumber",
+    "sourceField": "Serial Number"
+  },
+  {
+    "destinationField": "commisionedDate",
+    "sourceField": "Commisioned Date"
+  },
+  {
+    "destinationField": "location",
+    "sourceField": "Location"
+  },
+  {
+    "destinationField": "tonnage",
+    "sourceField": "Tonnage"
+  }
+]
+}

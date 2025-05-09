@@ -1,0 +1,22 @@
+app:
+  database:
+    host: 127.0.0.1
+    port: 3306
+    user: admin
+    name: kaneka_wms
+    password: wAYabEqNxeF9c5Sq
+    type: mysql
+  servicePoint: tcp://127.0.0.1:23568
+  componentTable: content_component
+  moduleName: "content"
+  excludeRoutingList:
+    - 'PUT,record/:recordId'
+    - 'POST,records'
+  loadComponentSchema: true
+  enableMigration: true
+content:
+  storageDirectory: "../content/storage"
+  applicationStorageDirectory: "base_services/content/storage/appData"
+  defaultPreviewUrl: "https://www.pngall.com/wp-content/uploads/2018/05/Files-High-Quality-PNG.png"
+  domainUrl: "http://localhost:9808/content"
+  fileSizeLimit: 5

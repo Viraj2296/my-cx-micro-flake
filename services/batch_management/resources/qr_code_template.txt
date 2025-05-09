@@ -1,0 +1,5 @@
+^XA
+^FO[COR_X],[COR_Y]
+^BQN,2,10
+^FDQA[QR_TEXT]^FS
+^XZ

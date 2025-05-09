@@ -1,0 +1,111 @@
+package workflow_actions
+
+import (
+	"cx-micro-flake/pkg/common"
+	"cx-micro-flake/pkg/response"
+	"cx-micro-flake/pkg/util"
+	"cx-micro-flake/services/it/handler/const_util"
+	"cx-micro-flake/services/it/handler/database"
+	"encoding/json"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
+	"net/http"
+)
+
+func (v *ActionService) HandleSapReject(ctx *gin.Context) {
+
+	recordId, basicUserInfo, serviceRequestInfo := v.getBasicInfo(ctx)
+	if util.InterfaceToBool(serviceRequestInfo["canSapReject"]) {
+		// dont' allow if ack email not configured or route email configured
+		if !v.EmailHandler.IsEmailTemplateExist(v.Database, const_util.SapApproveEmailTemplateType) {
+			v.Logger.Error("handle SAP approve has failed due to invalid email template type", zap.Any("record_id", recordId))
+			response.DispatchDetailedError(ctx, common.InvalidObjectStatus,
+				&response.DetailedError{
+					Header:      "No Actions Allowed",
+					Description: "Please consider configuring user acknowledgement and routing email templates to proceed further",
+				})
+			return
+		}
+		categoryId := util.InterfaceToInt(serviceRequestInfo["categoryId"])
+		err, categoryObject := database.Get(v.Database, const_util.ITServiceRequestCategoryTable, categoryId)
+
+		if err != nil {
+			v.Logger.Error("handle SAP approve has failed due to getting category", zap.Any("category_id", categoryId))
+			response.DispatchDetailedError(ctx, common.InvalidObjectStatus,
+				&response.DetailedError{
+					Header:      "No Actions Allowed",
+					Description: "Please consider configuring category in the it service request",
+				})
+			return
+		}
+
+		categoryInfo := make(map[string]interface{})
+		json.Unmarshal(categoryObject.ObjectInfo, &categoryInfo)
+		categoryTemplateIdId := util.InterfaceToInt(categoryInfo["categoryTemplate"])
+
+		err, categoryTemplateObject := database.Get(v.Database, const_util.IITServiceCategoryTemplateTable, categoryTemplateIdId)
+		categoryTemplateInfo := make(map[string]interface{})
+		json.Unmarshal(categoryTemplateObject.ObjectInfo, &categoryTemplateInfo)
+
+		serviceRequestInfo["canSapApprove"] = false
+		serviceRequestInfo["canSapReject"] = false
+		serviceRequestInfo["canExecPartyComplete"] = false
+		serviceRequestInfo["isAssignable"] = false
+		serviceRequestInfo["canEdit"] = true
+		serviceRequestInfo["serviceStatus"] = const_util.WorkFlowSapManager
+		serviceRequestInfo["actionStatus"] = const_util.ActionRejectedBySap
+		// send the email about ack saying, you request is under review
+
+		// Send an email to the hod
+		if util.InterfaceToString(serviceRequestInfo["hodEmail"]) != "" {
+			v.Logger.Info("generating email during user submit", zap.Any("hod_email", util.InterfaceToString(serviceRequestInfo["hodEmail"])))
+			v.EmailHandler.EmailGeneratorByEmail(v.Database, const_util.SapRejectToHODEmailTemplateType, util.InterfaceToString(serviceRequestInfo["hodEmail"]), const_util.ITServiceMyDepartmentRequestComponent, recordId)
+		} else {
+			response.DispatchDetailedError(ctx, common.InvalidObjectStatus,
+				&response.DetailedError{
+					Header:      "Server Exception [Invalid HOD Email]",
+					Description: "Please configure the Head Of Department email address in the request",
+				})
+			return
+		}
+		// Send an email to the user
+		v.EmailHandler.EmailGenerator(v.Database, const_util.SapRejectToUserEmailTemplateType, util.InterfaceToInt(serviceRequestInfo["createdBy"]), const_util.ITServiceMyRequestComponent, recordId)
+
+		existingActionRemarks := serviceRequestInfo["actionRemarks"].([]interface{})
+		existingActionRemarks = append(existingActionRemarks, database.ActionRemarks{
+			ExecutedTime:  util.GetCurrentTime(const_util.ISOTimeLayout),
+			Status:        "REJECTED BY SAP MANAGER",
+			UserId:        basicUserInfo.UserId,
+			Remarks:       "Your request has been rejected by Sap Manager.",
+			ProcessedTime: getTimeDifference(util.InterfaceToString(serviceRequestInfo["createdAt"])),
+		})
+		serviceRequestInfo["actionRemarks"] = existingActionRemarks
+		serialisedRequestFields, _ := json.Marshal(serviceRequestInfo)
+		var updateObject = make(map[string]interface{})
+		updateObject["object_info"] = serialisedRequestFields
+		err = database.Update(v.Database, const_util.ITServiceRequestTable, recordId, updateObject)
+		if err != nil {
+			v.Logger.Error("handle SAP approve has failed due to update resource", zap.String("error", err.Error()))
+			response.DispatchDetailedError(ctx, common.InvalidObjectStatus,
+				&response.DetailedError{
+					Header:      "Server Exception",
+					Description: "Your action can not be processed due to internal server error, please report this error code to system admin",
+				})
+			return
+		}
+
+		ctx.JSON(http.StatusOK, response.GeneralResponse{
+			Code:    0,
+			Message: "Your request has been processed successfully",
+		})
+
+	} else {
+		v.Logger.Error("handle SAP approve has failed due to flag  canSapApprove is false", zap.Any("record_id", recordId))
+		response.DispatchDetailedError(ctx, common.InvalidObjectStatus,
+			&response.DetailedError{
+				Header:      "Invalid Action",
+				Description: "Your action can not be performed against this request due to sequence validation",
+			})
+	}
+
+}

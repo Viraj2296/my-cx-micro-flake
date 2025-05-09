@@ -1,0 +1,22 @@
+app:
+  database:
+    host: 127.0.0.1
+    port: 3306
+    user: admin
+    name: fuyu_mes
+    password: wAYabEqNxeF9c5Sq
+    type: mysql
+  servicePoint: tcp://127.0.0.1:23568
+  files:
+    downloadDirectory: /tmp/on-boarding
+    uploadUrl: https://localhost
+  componentTable: system_setting_component
+  recordTrailTable: system_setting_record_trail
+  moduleName: "system"  #don't change it, better to put hardcoded in the code
+  excludeRoutingList:
+    - 'PUT,record/:recordId'
+    - 'POST,records'
+    - 'DELETE,record/:recordId'
+  enableMigration: true
+  loadComponentSchema: false
+  loadDefaultRecords: false
